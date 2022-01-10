@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Quidditch Manager</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="create_account">Create Account</string>
+    <string name="emailpassword_title_text">Log In</string>
+    <string name="signed_out">Signed Out</string>
+</resources>
