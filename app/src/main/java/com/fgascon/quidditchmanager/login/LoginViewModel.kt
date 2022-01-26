@@ -10,11 +10,10 @@ class LoginViewModel : ViewModel() {
         private const val TAG = "LoginViewModel"
     }
 
-    private val _email: MutableLiveData<String> = MutableLiveData()
-    val email:LiveData<String> get() = _email
+    val email: MutableLiveData<String> = MutableLiveData()
 
-    private val _password: MutableLiveData<String> = MutableLiveData()
-    val password:LiveData<String> get() = _password
+    val password: MutableLiveData<String> = MutableLiveData()
+
 
 
 }

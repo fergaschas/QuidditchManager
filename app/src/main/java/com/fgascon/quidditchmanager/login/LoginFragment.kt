@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.fgascon.quidditchmanager.R
 import com.fgascon.quidditchmanager.databinding.FragmentLoginBinding
@@ -24,7 +25,14 @@ class LoginFragment : Fragment() {
             loginFragment = this@LoginFragment
             loginViewModel = viewModel
         }
+
+        binding.signInBtn.setOnClickListener{
+            viewModel.email.value = binding.emailInput.text.toString()
+            Toast.makeText(context, viewModel.email.value, Toast.LENGTH_SHORT).show()
+        }
         return binding.root
     }
+
+
 
 }

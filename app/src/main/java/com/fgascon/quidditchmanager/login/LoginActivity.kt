@@ -15,8 +15,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.login_graph) as NavHostFragment
-        val navController = navHostFragment.navController
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
 
 }
