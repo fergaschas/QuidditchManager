@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.fgascon.quidditchmanager.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -48,6 +49,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(loginIntent)
         finish()
     }
-
 
 }
