@@ -2,11 +2,13 @@ package com.fgascon.quidditchmanager.login
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,7 +39,9 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.errorText.observe(viewLifecycleOwner) {
-            Snackbar.make(this.requireContext(), binding.root, it, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(this.requireContext(), binding.root, it, Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(Color.RED)
+                .show()
         }
 
         return binding.root
@@ -54,15 +58,6 @@ class LoginFragment : Fragment() {
     fun goToSignUpFragment() {
         val navController = findNavController()
         // TODO: 27/1/22 navigate to register fragment
-    }
-
-    fun verifyEmail() {
-        hideKeyboard()
-
-        viewModel.setEmail(binding.emailInput.text.toString())
-        viewModel.setPassword(binding.passwordInput.text.toString())
-
-        viewModel.verifyEmail()
     }
 
     fun signIn() {

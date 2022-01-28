@@ -28,54 +28,49 @@ class LoginViewModel : ViewModel() {
     val _errorText = MutableLiveData<String>()
     val errorText: LiveData<String> get() = _errorText
 
+    val _okText = MutableLiveData<String>()
+    val okText: LiveData<String> get() = _okText
+
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun trySignIn() {
+
+        if (!validateRegistrationFields())
+            return
 
         auth.signInWithEmailAndPassword(email.value!!, password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _user.value = auth.currentUser
-                    if (user.value!!.isEmailVerified) {
-                        _canSignIn.value = true
-                        _errorText.value = "email verificado"
-                    } else {
-                        _errorText.value = "Tienes que verificar tu email"
-                    }
+                    _canSignIn.value = true
                 } else {
                     _errorText.value = "Login incorrecto"
-                }
-            }
-
-    }
-
-    fun verifyEmail() {
-        auth.signInWithEmailAndPassword(email.value!!, password.value!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    if (auth.currentUser!!.isEmailVerified) {
-                        _errorText.value = "Este email ya esta verificado"
-                    } else {
-                        auth.currentUser?.sendEmailVerification()
-                    }
-                } else {
-                    _errorText.value = "Error de autenticacion"
                 }
             }
     }
 
     fun resetPassword() {
-        if (!validateEmailText(email.value)) return
+        if (!validateEmailText(email.value)) {
+            _errorText.value = "Este email no es correcto"
+            return
+        }
 
         auth.sendPasswordResetEmail(email.value!!)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    _okText.value = "Email para restablecer la contrasena enviado"
+                }else{
+                    _errorText.value = "Este email no esta registrado"
+                }
+            }
     }
 
     private fun validateEmailText(email: String?): Boolean {
         if (email.isNullOrEmpty())
             return false
 
-        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email)
-            .matches();
+        return !TextUtils.isEmpty(email) &&
+                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     private fun validatePasswordText(password: String?): Boolean {
@@ -86,8 +81,12 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun validateRegistrationFields(): Boolean {
-        return validateEmailText(email.value)
+        val isValid = validateEmailText(email.value)
                 && validatePasswordText(password.value)
+        if (!isValid) {
+            _errorText.value = "Login incorrecto"
+        }
+        return isValid
     }
 
     fun createAccount(): Boolean {
@@ -109,11 +108,11 @@ class LoginViewModel : ViewModel() {
     }
 
     fun setEmail(email: String?) {
-        _email.value = email
+        _email.value = email ?: ""
     }
 
     fun setPassword(password: String?) {
-        _password.value = password
+        _password.value = password ?: ""
     }
 
 }

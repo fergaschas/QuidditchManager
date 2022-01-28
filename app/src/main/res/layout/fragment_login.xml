@@ -74,29 +74,17 @@
                 android:onClick="@{()->loginFragment.goToSignUpFragment()}"
                 android:text="REGISTRARSE" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/verify_mail_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:onClick="@{()-> loginFragment.verifyEmail()}"
-                android:text="VERIFICAR EMAIL" />
 
             <Button
                 android:id="@+id/reset_password_btn"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_weight="1"
+                android:layout_gravity="center"
                 android:onClick="@{()->loginFragment.goToResetPasswordFragment()}"
-                android:text="RECUPERAR PASS" />
-        </LinearLayout>
+                android:text="RECUPERAR PASSWORD" />
+
 
     </LinearLayout>
 </layout>
