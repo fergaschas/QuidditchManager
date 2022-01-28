@@ -15,5 +15,9 @@
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.fgascon.quidditchmanager.login.ResetPasswordFragment"
-        android:label="ResetPasswordFragment" />
+        android:label="ResetPasswordFragment" >
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

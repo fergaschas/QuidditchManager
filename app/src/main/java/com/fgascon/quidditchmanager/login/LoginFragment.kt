@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.fgascon.quidditchmanager.MainActivity
+import com.fgascon.quidditchmanager.R
 import com.fgascon.quidditchmanager.databinding.FragmentLoginBinding
+import com.google.android.material.snackbar.Snackbar
 
 class LoginFragment : Fragment() {
 
@@ -29,16 +30,14 @@ class LoginFragment : Fragment() {
 
         binding.apply {
             loginFragment = this@LoginFragment
-            loginViewModel = viewModel
+
+            viewModel.canSignIn.observe(viewLifecycleOwner) { canSignIn ->
+                if (canSignIn) goToMainActivity()
+            }
         }
 
         viewModel.errorText.observe(viewLifecycleOwner) {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        }
-
-        binding.signInBtn.setOnClickListener {
-            hideKeyboard()
-            signIn()
+            Snackbar.make(this.requireContext(), binding.root, it, Snackbar.LENGTH_SHORT).show()
         }
 
         return binding.root
@@ -46,7 +45,10 @@ class LoginFragment : Fragment() {
 
     fun goToResetPasswordFragment() {
         val navController = findNavController()
-        val action = ""// TODO: 27/1/22
+        val action = LoginFragmentDirections.actionLoginFragmentToResetPasswordFragment()
+
+        navController.navigate(action)
+
     }
 
     fun goToSignUpFragment() {
@@ -54,12 +56,25 @@ class LoginFragment : Fragment() {
         // TODO: 27/1/22 navigate to register fragment
     }
 
-    fun signIn() {
+    fun verifyEmail() {
+        hideKeyboard()
 
         viewModel.setEmail(binding.emailInput.text.toString())
         viewModel.setPassword(binding.passwordInput.text.toString())
 
-        if (!viewModel.canSignIn()) return
+        viewModel.verifyEmail()
+    }
+
+    fun signIn() {
+        hideKeyboard()
+
+        viewModel.setEmail(binding.emailInput.text.toString())
+        viewModel.setPassword(binding.passwordInput.text.toString())
+
+        viewModel.trySignIn()
+    }
+
+    private fun goToMainActivity() {
 
         Intent(context, MainActivity::class.java).apply {
             startActivity(this)
@@ -68,7 +83,8 @@ class LoginFragment : Fragment() {
     }
 
     fun hideKeyboard() {
-        val keyboard = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val keyboard =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         keyboard.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 

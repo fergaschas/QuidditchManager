@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.fgascon.quidditchmanager.R
 import com.fgascon.quidditchmanager.databinding.FragmentResetPasswordBinding
 

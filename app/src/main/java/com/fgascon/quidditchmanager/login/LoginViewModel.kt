@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class LoginViewModel : ViewModel() {
 
@@ -18,26 +16,29 @@ class LoginViewModel : ViewModel() {
     val _user = MutableLiveData<FirebaseUser>()
     val user: LiveData<FirebaseUser> get() = _user
 
-    val _errorText = MutableLiveData<String>()
-    val errorText: LiveData<String> get() = _errorText
-
     private val _email: MutableLiveData<String> = MutableLiveData("")
     val email: LiveData<String> get() = _email
 
     private val _password: MutableLiveData<String> = MutableLiveData("")
     val password: LiveData<String> get() = _password
 
-    private val auth: FirebaseAuth= FirebaseAuth.getInstance()
+    private val _canSignIn: MutableLiveData<Boolean> = MutableLiveData(false)
+    val canSignIn: LiveData<Boolean> get() = _canSignIn
 
-    public fun canSignIn(): Boolean {
-        var canSignIn = false
+    val _errorText = MutableLiveData<String>()
+    val errorText: LiveData<String> get() = _errorText
+
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    fun trySignIn() {
 
         auth.signInWithEmailAndPassword(email.value!!, password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _user.value = auth.currentUser
                     if (user.value!!.isEmailVerified) {
-                        canSignIn = true
+                        _canSignIn.value = true
+                        _errorText.value = "email verificado"
                     } else {
                         _errorText.value = "Tienes que verificar tu email"
                     }
@@ -45,11 +46,22 @@ class LoginViewModel : ViewModel() {
                     _errorText.value = "Login incorrecto"
                 }
             }
-        return canSignIn
+
     }
 
     fun verifyEmail() {
-
+        auth.signInWithEmailAndPassword(email.value!!, password.value!!)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (auth.currentUser!!.isEmailVerified) {
+                        _errorText.value = "Este email ya esta verificado"
+                    } else {
+                        auth.currentUser?.sendEmailVerification()
+                    }
+                } else {
+                    _errorText.value = "Error de autenticacion"
+                }
+            }
     }
 
     fun resetPassword() {
@@ -58,7 +70,7 @@ class LoginViewModel : ViewModel() {
         auth.sendPasswordResetEmail(email.value!!)
     }
 
-    fun validateEmailText(email: String?): Boolean {
+    private fun validateEmailText(email: String?): Boolean {
         if (email.isNullOrEmpty())
             return false
 
@@ -66,19 +78,19 @@ class LoginViewModel : ViewModel() {
             .matches();
     }
 
-    fun validatePasswordText(password: String?): Boolean {
+    private fun validatePasswordText(password: String?): Boolean {
         if (password.isNullOrEmpty())
             return false
 
         return true
     }
 
-    fun validateRegistrationFields(): Boolean {
+    private fun validateRegistrationFields(): Boolean {
         return validateEmailText(email.value)
                 && validatePasswordText(password.value)
     }
 
-    public fun createAccount(): Boolean {
+    fun createAccount(): Boolean {
 
         var canCreateAccount = false
         if (validateRegistrationFields())
@@ -96,10 +108,11 @@ class LoginViewModel : ViewModel() {
         return canCreateAccount
     }
 
-    public fun setEmail(email: String?){
+    fun setEmail(email: String?) {
         _email.value = email
     }
-    public fun setPassword(password: String?){
+
+    fun setPassword(password: String?) {
         _password.value = password
     }
 

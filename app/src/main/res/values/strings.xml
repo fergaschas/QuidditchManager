@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quidditch Manager</string>
+    <string name="app_name">Manager</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="sign_in">Sign in</string>

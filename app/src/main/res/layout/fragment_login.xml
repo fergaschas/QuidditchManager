@@ -8,10 +8,6 @@
         <variable
             name="loginFragment"
             type="com.fgascon.quidditchmanager.login.LoginFragment" />
-
-        <variable
-            name="loginViewModel"
-            type="com.fgascon.quidditchmanager.login.LoginViewModel" />
     </data>
 
     <LinearLayout
@@ -62,19 +58,44 @@
 
             <Button
                 android:id="@+id/sign_in_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
+                android:onClick="@{()-> loginFragment.signIn()}"
                 android:text="INICIAR SESION" />
 
             <Button
                 android:id="@+id/sign_up_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
+                android:onClick="@{()->loginFragment.goToSignUpFragment()}"
                 android:text="REGISTRARSE" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/verify_mail_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:onClick="@{()-> loginFragment.verifyEmail()}"
+                android:text="VERIFICAR EMAIL" />
+
+            <Button
+                android:id="@+id/reset_password_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:onClick="@{()->loginFragment.goToResetPasswordFragment()}"
+                android:text="RECUPERAR PASS" />
         </LinearLayout>
 
     </LinearLayout>
