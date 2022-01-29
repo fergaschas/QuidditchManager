@@ -7,6 +7,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel : ViewModel() {
 
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
     private val email: MutableLiveData<String> = MutableLiveData("")
 
     private val password: MutableLiveData<String> = MutableLiveData("")
@@ -22,8 +24,6 @@ class LoginViewModel : ViewModel() {
 
     private val _okText = MutableLiveData<String>()
     val okText: LiveData<String> get() = _okText
-
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun trySignIn() {
 
