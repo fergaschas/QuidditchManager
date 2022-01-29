@@ -88,7 +88,6 @@ class LoginViewModel : ViewModel() {
             return false
 
         if (password.length < 6) {
-            _errorText.value = "la contraseña tiene que tener mínimo 6 carácteres"
             return false
         }
 

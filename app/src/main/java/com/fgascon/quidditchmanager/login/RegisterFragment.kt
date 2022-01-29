@@ -48,7 +48,7 @@ class RegisterFragment : Fragment() {
 
     private fun goToMainActivity() {
 
-        Prefs(context!!).setLogged(true)
+        Prefs(requireContext()).setLogged(true)
 
         Intent(context, MainActivity::class.java).apply {
             startActivity(this)

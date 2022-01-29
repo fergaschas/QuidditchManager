@@ -17,8 +17,8 @@ class LoginActivity : AppCompatActivity() {
         val prefs = Prefs(applicationContext)
         val isLogged = prefs.getLogged()
 
-        if (isLogged)
-            goToMainActivity()
+        //if (isLogged)
+            //goToMainActivity()
 
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
