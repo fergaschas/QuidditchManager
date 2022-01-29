@@ -1,34 +1,26 @@
 package com.fgascon.quidditchmanager.login
 
-import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 class LoginViewModel : ViewModel() {
 
-    companion object {
-        private const val TAG = "LoginViewModel"
-    }
+    private val email: MutableLiveData<String> = MutableLiveData("")
 
-    val _user = MutableLiveData<FirebaseUser>()
-    val user: LiveData<FirebaseUser> get() = _user
-
-    private val _email: MutableLiveData<String> = MutableLiveData("")
-    val email: LiveData<String> get() = _email
-
-    private val _password: MutableLiveData<String> = MutableLiveData("")
-    val password: LiveData<String> get() = _password
+    private val password: MutableLiveData<String> = MutableLiveData("")
 
     private val _canSignIn: MutableLiveData<Boolean> = MutableLiveData(false)
     val canSignIn: LiveData<Boolean> get() = _canSignIn
 
-    val _errorText = MutableLiveData<String>()
+    private val _canCreateAccount: MutableLiveData<Boolean> = MutableLiveData(false)
+    val canCreateAccount: LiveData<Boolean> get() = _canCreateAccount
+
+    private val _errorText = MutableLiveData<String>()
     val errorText: LiveData<String> get() = _errorText
 
-    val _okText = MutableLiveData<String>()
+    private val _okText = MutableLiveData<String>()
     val okText: LiveData<String> get() = _okText
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -41,10 +33,24 @@ class LoginViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email.value!!, password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _user.value = auth.currentUser
                     _canSignIn.value = true
                 } else {
                     _errorText.value = "Login incorrecto"
+                }
+            }
+    }
+
+    fun tryCreateAccount() {
+
+        if (!validateRegistrationFields())
+            return
+
+        auth.createUserWithEmailAndPassword(email.value!!, password.value!!)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _canCreateAccount.value = true
+                } else {
+                    _errorText.value = "Error en el registro"
                 }
             }
     }
@@ -57,9 +63,9 @@ class LoginViewModel : ViewModel() {
 
         auth.sendPasswordResetEmail(email.value!!)
             .addOnCompleteListener { task ->
-                if(task.isSuccessful){
+                if (task.isSuccessful) {
                     _okText.value = "Email para restablecer la contrasena enviado"
-                }else{
+                } else {
                     _errorText.value = "Este email no esta registrado"
                 }
             }
@@ -69,50 +75,38 @@ class LoginViewModel : ViewModel() {
         if (email.isNullOrEmpty())
             return false
 
-        return !TextUtils.isEmpty(email) &&
-                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _errorText.value = "El email no es válido"
+            return false
+        }
+
+        return true
     }
 
     private fun validatePasswordText(password: String?): Boolean {
         if (password.isNullOrEmpty())
             return false
 
+        if (password.length < 6) {
+            _errorText.value = "la contraseña tiene que tener mínimo 6 carácteres"
+            return false
+        }
+
         return true
     }
 
     private fun validateRegistrationFields(): Boolean {
-        val isValid = validateEmailText(email.value)
+
+        return validateEmailText(email.value)
                 && validatePasswordText(password.value)
-        if (!isValid) {
-            _errorText.value = "Login incorrecto"
-        }
-        return isValid
-    }
-
-    fun createAccount(): Boolean {
-
-        var canCreateAccount = false
-        if (validateRegistrationFields())
-            return false
-
-        auth.createUserWithEmailAndPassword(email.value!!, password.value!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _user.value = auth.currentUser
-                    canCreateAccount = true
-                } else {
-                    _errorText.value = "Error en el registro"
-                }
-            }
-        return canCreateAccount
     }
 
     fun setEmail(email: String?) {
-        _email.value = email ?: ""
+        this.email.value = email ?: ""
     }
 
     fun setPassword(password: String?) {
-        _password.value = password ?: ""
+        this.password.value = password ?: ""
     }
 
 }

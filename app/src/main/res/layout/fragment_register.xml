@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="loginFragment"
-            type="com.fgascon.quidditchmanager.login.LoginFragment" />
+            name="registerFragment"
+            type="com.fgascon.quidditchmanager.login.RegisterFragment" />
     </data>
 
     <LinearLayout
@@ -52,30 +52,21 @@
             android:inputType="textPassword" />
 
         <Button
+            android:id="@+id/sign_up_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:onClick="@{()->registerFragment.createAccount()}"
+            android:text="CREAR CUENTA" />
+
+        <Button
             android:id="@+id/sign_in_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="1"
-            android:onClick="@{()-> loginFragment.signIn()}"
-            android:text="INICIAR SESION" />
-
-        <Button
-            android:id="@+id/sign_up_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:onClick="@{()->loginFragment.goToSignUpFragment()}"
-            android:text="CREAR CUENTA NUEVA" />
-
-        <Button
-            android:id="@+id/reset_password_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:onClick="@{()->loginFragment.goToResetPasswordFragment()}"
-            android:text="RECUPERAR CONTRASEÑA" />
+            android:onClick="@{()-> registerFragment.goToLoginFragment()}"
+            android:text="IR A INICIO DE SESION" />
 
 
     </LinearLayout>
