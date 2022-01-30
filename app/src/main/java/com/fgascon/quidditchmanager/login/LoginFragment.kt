@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.fgascon.quidditchmanager.MainActivity
+import com.fgascon.quidditchmanager.manager.MainActivity
 import com.fgascon.quidditchmanager.data.preferences.Prefs
 import com.fgascon.quidditchmanager.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar

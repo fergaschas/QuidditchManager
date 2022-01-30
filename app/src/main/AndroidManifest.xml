@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuidditchManager">
         <activity
-            android:name=".MainActivity"
+            android:name=".manager.MainActivity"
             android:exported="true" />
         <activity
             android:name=".login.LoginActivity"
